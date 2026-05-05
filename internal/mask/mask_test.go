@@ -60,6 +60,26 @@ func TestMask_RevealLen(t *testing.T) {
 	}
 }
 
+// TestMask_RevealLen_ValueShorterThanRevealLen ensures that when the value is
+// shorter than or equal to RevealLen, the entire value is still masked.
+func TestMask_RevealLen_ValueShorterThanRevealLen(t *testing.T) {
+	m := mask.New()
+	m.RevealLen = 4
+	tests := []struct {
+		value    string
+		expected string
+	}{
+		{"abc", "***"},
+		{"abcd", "****"},
+	}
+	for _, tt := range tests {
+		got := m.Mask("API_KEY", tt.value)
+		if got != tt.expected {
+			t.Errorf("Mask(%q): expected %q, got %q", tt.value, tt.expected, got)
+		}
+	}
+}
+
 func TestMaskMap(t *testing.T) {
 	m := mask.New()
 	env := map[string]string{
