@@ -54,6 +54,17 @@ func (r *Result) Summary() (missing, extra, changed int) {
 	return
 }
 
+// Filter returns a new Result containing only entries with the given status.
+func (r *Result) Filter(status Status) *Result {
+	var entries []Entry
+	for _, e := range r.Entries {
+		if e.Status == status {
+			entries = append(entries, e)
+		}
+	}
+	return &Result{Entries: entries}
+}
+
 // Compare diffs base against dest, returning a Result with all entries.
 // base is the reference environment (e.g. .env.example).
 // dest is the target environment (e.g. .env.production).
