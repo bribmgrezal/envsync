@@ -52,6 +52,14 @@ func TestValidate_EmptyValueIsAllowed(t *testing.T) {
 	}
 }
 
+func TestValidate_EmptyEnv(t *testing.T) {
+	env := map[string]string{}
+	result := validate.Validate(env)
+	if !result.Valid() {
+		t.Errorf("expected empty env map to be valid, got issues: %v", result.Issues)
+	}
+}
+
 func TestValidateKeys_AllPresent(t *testing.T) {
 	env := map[string]string{
 		"DB_HOST": "localhost",
@@ -86,6 +94,17 @@ func TestValidateKeys_EmptyRequiredValue(t *testing.T) {
 	result := validate.ValidateKeys(env, required)
 	if result.Valid() {
 		t.Error("expected issue for required key with empty value")
+	}
+}
+
+func TestValidateKeys_EmptyRequiredList(t *testing.T) {
+	env := map[string]string{
+		"DB_HOST": "localhost",
+	}
+	required := []string{}
+	result := validate.ValidateKeys(env, required)
+	if !result.Valid() {
+		t.Errorf("expected no issues for empty required list, got: %v", result.Issues)
 	}
 }
 
