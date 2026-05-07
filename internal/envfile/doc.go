@@ -1,27 +1,15 @@
-// Package envfile provides functionality for parsing .env files into
-// structured representations suitable for diffing and syncing across
-// environments.
+// Package envfile provides utilities for reading, writing, and manipulating
+// .env files.
 //
-// # Parsing
+// The package supports:
 //
-// Use [Parse] to read an .env file from disk. The resulting [EnvFile]
-// contains an ordered slice of [Entry] values as well as an index map
-// for O(1) key lookups.
+//   - Parsing .env files into a slice of Entry values (Parse)
+//   - Converting between Entry slices and maps (ToMap, FromMap)
+//   - Filtering entries by prefix, exclusion list, or empty-value policy (Filter)
+//   - Merging two sets of entries with configurable overwrite behaviour (Merge)
+//   - Transforming entries by uppercasing keys, trimming values, or
+//     adding/removing key prefixes (Transform)
 //
-// Supported syntax:
-//   - KEY=VALUE
-//   - KEY="quoted value"
-//   - KEY=VALUE # inline comment
-//   - # full-line comments (skipped)
-//   - blank lines (skipped)
-//
-// Example:
-//
-//	env, err := envfile.Parse(".env.production")
-//	if err != nil {
-//	    log.Fatal(err)
-//	}
-//	for _, e := range env.Entries {
-//	    fmt.Printf("%s=%s\n", e.Key, e.Value)
-//	}
+// Entry order is preserved wherever possible so that round-trip writes
+// produce minimal diffs.
 package envfile
