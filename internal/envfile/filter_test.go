@@ -78,3 +78,10 @@ func TestFilter_EmptyInput_ReturnsEmpty(t *testing.T) {
 		t.Fatalf("expected 0 entries, got %d", len(got))
 	}
 }
+
+func TestFilter_Prefix_NoMatch_ReturnsEmpty(t *testing.T) {
+	got := Filter(sampleFilterEntries(), FilterOptions{Prefix: "UNKNOWN_"})
+	if len(got) != 0 {
+		t.Fatalf("expected 0 entries for non-matching prefix, got %d", len(got))
+	}
+}
